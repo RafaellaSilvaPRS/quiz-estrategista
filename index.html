@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Quiz Estrategista</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@600;700&family=Nunito+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  /* Layout: coluna única centralizada, cabeçalho em faixa verde-petróleo como no slide, cartões numerados. */
+  :root {
+    --bg: #F4F7F6;
+    --surface: #FFFFFF;
+    --ink: #17302C;
+    --muted: #5C6F6B;
+    --accent: #00695C;
+    --accent-ink: #F6EFE6;
+    --line: #D5E1DE;
+    --ok: #1E7F4F;
+    --ok-bg: #E3F4EA;
+    --bad: #B3261E;
+    --bad-bg: #FBE7E5;
+    --display: "Josefin Sans", "Trebuchet MS", sans-serif;
+    --body: "Nunito Sans", "Segoe UI", system-ui, sans-serif;
+    color-scheme: light;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #0F1A18; --surface: #172522; --ink: #E6EFEC; --muted: #9DB2AD;
+      --accent: #2FA392; --accent-ink: #0B1715; --line: #2A3D39;
+      --ok: #5FD39A; --ok-bg: #173527; --bad: #FF8A80; --bad-bg: #3A1E1C;
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #0F1A18; --surface: #172522; --ink: #E6EFEC; --muted: #9DB2AD;
+    --accent: #2FA392; --accent-ink: #0B1715; --line: #2A3D39;
+    --ok: #5FD39A; --ok-bg: #173527; --bad: #FF8A80; --bad-bg: #3A1E1C;
+    color-scheme: dark;
+  }
+
+  * { box-sizing: border-box; }
+  html, body { margin: 0; }
+  body { background: var(--bg); color: var(--ink); font-family: var(--body); font-size: 17px; line-height: 1.5; }
+
+  header { background: var(--accent); color: var(--accent-ink); padding: 28px 16px 22px; }
+  .wrap { max-width: 720px; margin: 0 auto; padding: 0 16px; }
+  header .wrap { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 12px; }
+  .eyebrow { font-family: var(--display); font-size: 0.85rem; letter-spacing: 0.12em; text-transform: uppercase; opacity: 0.85; margin: 0 0 4px; }
+  h1 { font-family: var(--display); font-size: clamp(2rem, 6vw, 2.8rem); line-height: 1.05; margin: 0; text-transform: uppercase; text-wrap: balance; }
+  .score { font-family: var(--display); font-size: 1.1rem; background: rgba(255,255,255,0.14); border-radius: 999px; padding: 6px 14px; font-variant-numeric: tabular-nums; white-space: nowrap; }
+
+  main { padding: 24px 0 48px; }
+  .intro { color: var(--muted); margin: 0 0 20px; }
+  ol.quiz { list-style: none; margin: 0; padding: 0; display: grid; gap: 16px; }
+
+  .q { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 18px; display: grid; gap: 12px; }
+  .q-head { display: grid; grid-template-columns: 40px 1fr; gap: 12px; align-items: start; }
+  .num { width: 40px; height: 40px; border-radius: 50%; background: var(--accent); color: var(--accent-ink); font-family: var(--display); font-weight: 700; font-size: 1.15rem; display: grid; place-items: center; padding-top: 3px; }
+  .q h2 { font-size: 1.05rem; font-weight: 700; margin: 6px 0 0; text-wrap: balance; }
+  .q code { font-family: Consolas, "Cascadia Mono", monospace; font-size: 0.92em; background: var(--bg); border: 1px solid var(--line); border-radius: 4px; padding: 1px 5px; }
+
+  table.data { border-collapse: collapse; font-variant-numeric: tabular-nums; margin-left: 52px; }
+  table.data th, table.data td { border: 1px solid var(--line); padding: 4px 14px; text-align: left; }
+  table.data th { background: var(--bg); font-weight: 700; }
+  table.data td:last-child, table.data th:last-child { text-align: right; }
+
+  .opts { display: grid; gap: 8px; padding-left: 52px; }
+  .opt { font: inherit; color: var(--ink); text-align: left; background: var(--surface); border: 1.5px solid var(--line); border-radius: 8px; padding: 10px 12px; cursor: pointer; display: grid; grid-template-columns: 26px 1fr; gap: 8px; align-items: baseline; }
+  .opt:hover:not(:disabled) { border-color: var(--accent); }
+  .opt:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+  .opt:disabled { cursor: default; }
+  .opt .letter { font-weight: 700; color: var(--muted); }
+  .opt.correct { background: var(--ok-bg); border-color: var(--ok); }
+  .opt.correct .letter { color: var(--ok); }
+  .opt.wrong { background: var(--bad-bg); border-color: var(--bad); }
+  .opt.wrong .letter { color: var(--bad); }
+
+  .feedback { margin-left: 52px; padding: 10px 12px; border-radius: 8px; border-left: 4px solid var(--ok); background: var(--ok-bg); }
+  .feedback.bad { border-left-color: var(--bad); background: var(--bad-bg); }
+  .feedback strong { display: block; }
+  .feedback[hidden] { display: none; }
+
+  .end { margin-top: 24px; display: flex; flex-wrap: wrap; gap: 12px; align-items: center; justify-content: space-between; background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 16px 18px; }
+  .end p { margin: 0; font-weight: 600; }
+  .btn { font: inherit; font-weight: 700; background: var(--accent); color: var(--accent-ink); border: 0; border-radius: 8px; padding: 10px 18px; cursor: pointer; }
+  .btn:focus-visible { outline: 3px solid var(--ink); outline-offset: 2px; }
+
+  @media (max-width: 480px) {
+    .opts, .feedback, table.data { margin-left: 0; padding-left: 0; }
+    .opts { padding-left: 0; }
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    .opt { transition: background-color .15s, border-color .15s; }
+  }
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap">
+    <div>
+      <p class="eyebrow">Aula de Power BI</p>
+      <h1>Quiz Estrategista</h1>
+    </div>
+    <div class="score" id="score" aria-live="polite">0 de 5 acertos</div>
+  </div>
+</header>
+
+<main class="wrap">
+  <p class="intro">Toque na alternativa que você acha correta. A resposta aparece na hora.</p>
+  <ol class="quiz" id="quiz"></ol>
+  <div class="end">
+    <p id="resumo">Responda as 5 perguntas para ver seu resultado.</p>
+    <button class="btn" id="reiniciar" type="button">Recomeçar quiz</button>
+  </div>
+</main>
+
+<script>
+const PERGUNTAS = [
+  {
+    texto: "Qual função DAX soma todos os valores de uma coluna numérica?",
+    opcoes: ["COUNT", "SUM", "AVERAGE", "DISTINCTCOUNT"],
+    certa: 1,
+    explicacao: "SUM soma os valores de uma coluna, por exemplo SUM(Vendas[Valor]). COUNT conta, AVERAGE tira a média e DISTINCTCOUNT conta valores distintos."
+  },
+  {
+    texto: "O que significa a sigla DAX?",
+    opcoes: ["Data Access XML", "Data Analysis Expressions", "Dynamic Aggregation Extension", "Data Analytics Exchange"],
+    certa: 1,
+    explicacao: "DAX é Data Analysis Expressions, a linguagem de fórmulas usada em medidas, colunas calculadas e tabelas calculadas do Power BI."
+  },
+  {
+    texto: "Em um relacionamento 1:* (um para muitos) do modelo estrela, onde ficam as tabelas dimensão e a tabela fato?",
+    opcoes: ["As duas ficam no lado *", "Dimensões no lado 1 e a fato no lado *", "Fato no lado 1 e dimensões no lado *", "Tanto faz o lado"],
+    certa: 1,
+    explicacao: "Cada cliente, produto ou data aparece uma única vez na dimensão (lado 1) e se repete muitas vezes na tabela fato, onde estão as vendas (lado *)."
+  },
+  {
+    texto: "Qual é a linguagem usada pelo Power Query para transformar os dados antes de carregá-los no modelo?",
+    opcoes: ["DAX", "SQL", "M", "Python"],
+    certa: 2,
+    explicacao: "Cada etapa do Power Query é escrita em M (Power Query Formula Language). Dá para ver o código em Página Inicial > Editor Avançado. DAX é usado depois, nas medidas."
+  },
+  {
+    texto: "A tabela Vendas tem os registros abaixo. Ao criar a medida <code>Total = SUM(Vendas[Qtd])</code> e colocá-la em um visual de tabela por Vendedora, qual será o resultado?",
+    tabela: [["Vendedora", "Qtd"], ["Ana", "5"], ["Maria", "10"], ["Ana", "15"]],
+    opcoes: ["Ana 5 e Maria 10", "Ana 20 e Maria 10", "Ana 15 e Maria 10", "As duas com 30"],
+    certa: 1,
+    explicacao: "Cada linha do visual filtra uma vendedora (contexto de filtro). Na linha da Ana, a medida soma 5 + 15 = 20; na da Maria, soma só 10. O total do visual fica 30."
+  }
+];
+
+const LETRAS = ["a", "b", "c", "d"];
+const quiz = document.getElementById("quiz");
+const placar = document.getElementById("score");
+const resumo = document.getElementById("resumo");
+let respondidas = 0, acertos = 0;
+
+function montar() {
+  respondidas = 0; acertos = 0;
+  quiz.innerHTML = "";
+  PERGUNTAS.forEach((p, i) => {
+    const li = document.createElement("li");
+    li.className = "q";
+    let html = `<div class="q-head"><span class="num" aria-hidden="true">${i + 1}</span><h2 id="q${i}">${p.texto}</h2></div>`;
+    if (p.tabela) {
+      const [cab, ...linhas] = p.tabela;
+      html += `<div style="overflow-x:auto"><table class="data"><thead><tr>${cab.map(c => `<th>${c}</th>`).join("")}</tr></thead><tbody>${linhas.map(l => `<tr>${l.map(c => `<td>${c}</td>`).join("")}</tr>`).join("")}</tbody></table></div>`;
+    }
+    html += `<div class="opts" role="group" aria-labelledby="q${i}">${p.opcoes.map((o, j) =>
+      `<button type="button" class="opt" id="q${i}o${j}" data-q="${i}" data-o="${j}"><span class="letter">${LETRAS[j]})</span><span>${o}</span></button>`).join("")}</div>`;
+    html += `<div class="feedback" id="f${i}" hidden aria-live="polite"></div>`;
+    li.innerHTML = html;
+    quiz.appendChild(li);
+  });
+  atualizar();
+}
+
+function responder(btn) {
+  const i = Number(btn.dataset.q), j = Number(btn.dataset.o), p = PERGUNTAS[i];
+  const botoes = quiz.querySelectorAll(`.opt[data-q="${i}"]`);
+  botoes.forEach(b => { b.disabled = true; });
+  botoes[p.certa].classList.add("correct");
+  const acertou = j === p.certa;
+  if (!acertou) btn.classList.add("wrong");
+  const fb = document.getElementById(`f${i}`);
+  fb.className = "feedback" + (acertou ? "" : " bad");
+  fb.innerHTML = `<strong>${acertou ? "Acertou!" : `Resposta certa: ${LETRAS[p.certa]}) ${p.opcoes[p.certa]}`}</strong>${p.explicacao}`;
+  fb.hidden = false;
+  respondidas++; if (acertou) acertos++;
+  atualizar();
+}
+
+function atualizar() {
+  placar.textContent = `${acertos} de ${PERGUNTAS.length} acertos`;
+  if (respondidas < PERGUNTAS.length) {
+    resumo.textContent = `Respondidas: ${respondidas} de ${PERGUNTAS.length}.`;
+  } else {
+    const msg = acertos === 5 ? "Gabaritou! Estrategista de verdade." : acertos >= 3 ? "Mandou bem! Revise as que errou." : "Vale revisar o conteúdo da aula e tentar de novo.";
+    resumo.textContent = `Você acertou ${acertos} de ${PERGUNTAS.length}. ${msg}`;
+  }
+}
+
+quiz.addEventListener("click", e => {
+  const btn = e.target.closest(".opt");
+  if (btn && !btn.disabled) responder(btn);
+});
+document.getElementById("reiniciar").addEventListener("click", () => { montar(); window.scrollTo({ top: 0 }); });
+montar();
+</script>
+</body>
+</html>
