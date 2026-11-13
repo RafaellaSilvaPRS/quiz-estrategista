@@ -1,0 +1,167 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Quiz Power BI Essencial</title>
+<style>
+  :root{
+    --azul:#1f4e79; --azul-claro:#e8f0f8; --amarelo:#ffc000; --texto:#222;
+    --borda:#d5dde6; --ok:#1e8e3e; --ok-bg:#e6f4ea; --erro:#c5221f; --erro-bg:#fce8e6; --fundo:#f3f6f9;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--fundo);color:var(--texto);
+    font-family:"Segoe UI",Roboto,Helvetica,Arial,sans-serif;font-size:17px;line-height:1.4}
+  .card{max-width:640px;margin:16px auto;background:#fff;border:2px solid var(--azul);
+    border-radius:20px;padding:24px 20px 28px;box-shadow:0 4px 14px rgba(0,0,0,.08)}
+  @media (max-width:680px){.card{margin:12px 16px;padding:20px 16px 24px}}
+  h1{margin:0 0 24px;text-align:center;color:var(--azul);font-size:1.6rem;letter-spacing:.02em}
+  .q{margin:0 0 26px;border:0;padding:0}
+  .q legend,.q label.enun{display:flex;gap:10px;align-items:flex-start;font-weight:500;margin-bottom:10px;padding:0}
+  .n{flex:0 0 auto;background:var(--amarelo);color:#222;font-weight:700;border-radius:5px;
+    min-width:26px;text-align:center;padding:0 6px}
+  .opts{display:flex;flex-direction:column;gap:6px;padding-left:36px}
+  .opt{display:flex;align-items:center;gap:10px;padding:8px 10px;border:1px solid var(--borda);
+    border-radius:10px;cursor:pointer;transition:background .15s}
+  .opt:hover{background:var(--azul-claro)}
+  .opt input{width:20px;height:20px;accent-color:var(--azul);margin:0}
+  .txt{margin-left:36px;width:calc(100% - 36px);max-width:320px;font-size:17px;padding:10px 12px;
+    border:1px solid var(--borda);border-radius:10px}
+  .txt:focus{outline:2px solid var(--azul);border-color:var(--azul)}
+  button{display:block;width:100%;margin-top:8px;padding:14px;font-size:1.05rem;font-weight:600;
+    color:#fff;background:var(--azul);border:0;border-radius:12px;cursor:pointer}
+  button:hover{filter:brightness(1.1)}
+  button.sec{background:#fff;color:var(--azul);border:2px solid var(--azul)}
+  .opt.certa{background:var(--ok-bg);border-color:var(--ok)}
+  .opt.errada{background:var(--erro-bg);border-color:var(--erro)}
+  .fb{margin:8px 0 0 36px;font-size:.92rem;padding:8px 10px;border-radius:8px;display:none}
+  .fb.ok{display:block;background:var(--ok-bg);color:var(--ok)}
+  .fb.no{display:block;background:var(--erro-bg);color:var(--erro)}
+  #resultado{display:none;text-align:center;margin:0 0 24px;padding:18px;border-radius:14px;background:var(--azul-claro)}
+  #resultado .placar{font-size:2.4rem;font-weight:700;color:var(--azul)}
+  .aviso{color:var(--erro);font-size:.92rem;text-align:center;margin-top:10px;min-height:1.2em}
+</style>
+</head>
+<body>
+<main class="card">
+  <h1>QUIZ POWER BI ESSENCIAL</h1>
+
+  <div id="resultado" role="status" aria-live="polite">
+    <div class="placar" id="placar"></div>
+    <div id="msg"></div>
+  </div>
+
+  <form id="quiz" novalidate>
+    <fieldset class="q" data-q="1">
+      <legend><span class="n">1</span><span>BI significa...</span></legend>
+      <div class="opts">
+        <label class="opt"><input type="radio" name="q1" value="a">Business Information</label>
+        <label class="opt"><input type="radio" name="q1" value="b">Business Insider</label>
+        <label class="opt"><input type="radio" name="q1" value="c">Business Initiation</label>
+        <label class="opt"><input type="radio" name="q1" value="d">Business Intelligence</label>
+      </div>
+      <div class="fb"></div>
+    </fieldset>
+
+    <fieldset class="q" data-q="2">
+      <legend><span class="n">2</span><span>O Power BI foi lançado para o público geral em...</span></legend>
+      <div class="opts">
+        <label class="opt"><input type="radio" name="q2" value="a">2013</label>
+        <label class="opt"><input type="radio" name="q2" value="b">2014</label>
+        <label class="opt"><input type="radio" name="q2" value="c">2015</label>
+        <label class="opt"><input type="radio" name="q2" value="d">2016</label>
+      </div>
+      <div class="fb"></div>
+    </fieldset>
+
+    <fieldset class="q" data-q="3">
+      <legend><span class="n">3</span><span>A chegada do Power BI foi a partir do...</span></legend>
+      <div class="opts">
+        <label class="opt"><input type="radio" name="q3" value="a">Microsoft Excel</label>
+        <label class="opt"><input type="radio" name="q3" value="b">Microsoft Word</label>
+        <label class="opt"><input type="radio" name="q3" value="c">Microsoft PowerPoint</label>
+        <label class="opt"><input type="radio" name="q3" value="d">Microsoft Outlook</label>
+      </div>
+      <div class="fb"></div>
+    </fieldset>
+
+    <div class="q" data-q="4">
+      <label class="enun" for="q4"><span class="n">4</span><span>A mãe de Ana tem cinco filhas: Fafá, Fefê, Fifi, Fofó e...? Qual é o nome da quinta filha?</span></label>
+      <input class="txt" type="text" id="q4" name="q4" autocomplete="off" placeholder="Sua resposta">
+      <div class="fb"></div>
+    </div>
+
+    <div class="q" data-q="5">
+      <label class="enun" for="q5"><span class="n">5</span><span>SACO está para ASCO assim como 7683 está para...</span></label>
+      <input class="txt" type="text" id="q5" name="q5" inputmode="numeric" autocomplete="off" placeholder="Sua resposta">
+      <div class="fb"></div>
+    </div>
+
+    <button type="submit" id="enviar">Ver resultado</button>
+    <div class="aviso" id="aviso"></div>
+    <button type="button" class="sec" id="refazer" style="display:none">Responder de novo</button>
+  </form>
+</main>
+
+<script>
+  const norm = s => (s || "").normalize("NFD").replace(/[̀-ͯ]/g, "").trim().toLowerCase();
+  const gabarito = {
+    q1: { tipo: "radio", certa: "d", txt: "Business Intelligence" },
+    q2: { tipo: "radio", certa: "c", txt: "2015 (julho de 2015)" },
+    q3: { tipo: "radio", certa: "a", txt: "Microsoft Excel (Power Pivot, Power Query e Power View nasceram como suplementos do Excel)" },
+    q4: { tipo: "texto", ok: v => norm(v).replace(/[^a-z]/g, "") === "ana", txt: "Ana! A pergunta já diz: “a mãe de Ana”." },
+    q5: { tipo: "texto", ok: v => v.replace(/\D/g, "") === "6783", txt: "6783 (troca a 1ª letra com a 2ª: S-A-C-O → A-S-C-O, então 7-6-8-3 → 6-7-8-3)" }
+  };
+
+  const form = document.getElementById("quiz");
+  const aviso = document.getElementById("aviso");
+
+  form.addEventListener("submit", e => {
+    e.preventDefault();
+    const faltando = Object.keys(gabarito).filter(k => {
+      const g = gabarito[k];
+      return g.tipo === "radio" ? !form.querySelector(`input[name=${k}]:checked`) : !form[k].value.trim();
+    });
+    if (faltando.length) {
+      aviso.textContent = "Responda todas as perguntas (falta: " + faltando.map(k => k.slice(1)).join(", ") + ").";
+      return;
+    }
+    aviso.textContent = "";
+    let acertos = 0;
+    for (const k of Object.keys(gabarito)) {
+      const g = gabarito[k];
+      const bloco = form.querySelector(`[data-q="${k.slice(1)}"]`);
+      const fb = bloco.querySelector(".fb");
+      let ok;
+      if (g.tipo === "radio") {
+        const marcada = form.querySelector(`input[name=${k}]:checked`);
+        ok = marcada.value === g.certa;
+        bloco.querySelectorAll("input").forEach(i => {
+          i.disabled = true;
+          if (i.value === g.certa) i.parentElement.classList.add("certa");
+          else if (i === marcada) i.parentElement.classList.add("errada");
+        });
+      } else {
+        ok = g.ok(form[k].value);
+        form[k].disabled = true;
+      }
+      if (ok) acertos++;
+      fb.className = "fb " + (ok ? "ok" : "no");
+      fb.textContent = (ok ? "✔ Correto! " : "✘ Resposta certa: ") + g.txt;
+    }
+    const total = Object.keys(gabarito).length;
+    document.getElementById("placar").textContent = acertos + " / " + total;
+    document.getElementById("msg").textContent =
+      acertos === total ? "Perfeito! Você gabaritou 🎉" :
+      acertos >= 3 ? "Muito bem! Confira o gabarito abaixo." :
+      "Confira o gabarito abaixo e tente de novo!";
+    document.getElementById("resultado").style.display = "block";
+    document.getElementById("enviar").style.display = "none";
+    document.getElementById("refazer").style.display = "block";
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  });
+
+  document.getElementById("refazer").addEventListener("click", () => location.reload());
+</script>
+</body>
+</html>
