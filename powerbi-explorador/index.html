@@ -1,0 +1,163 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Quiz Power BI Explorador</title>
+<style>
+  :root{
+    --azul:#1f4e79; --azul-claro:#e8f0f8; --amarelo:#ffc000; --texto:#222;
+    --borda:#d5dde6; --ok:#1e8e3e; --ok-bg:#e6f4ea; --erro:#c5221f; --erro-bg:#fce8e6; --fundo:#f3f6f9;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--fundo);color:var(--texto);
+    font-family:"Segoe UI",Roboto,Helvetica,Arial,sans-serif;font-size:17px;line-height:1.4}
+  .card{max-width:640px;margin:16px auto;background:#fff;border:2px solid var(--azul);
+    border-radius:20px;padding:24px 20px 28px;box-shadow:0 4px 14px rgba(0,0,0,.08)}
+  @media (max-width:680px){.card{margin:12px 16px;padding:20px 16px 24px}}
+  h1{margin:0 0 4px;text-align:center;color:var(--azul);font-size:1.6rem;letter-spacing:.02em}
+  .nivel{text-align:center;color:#555;font-size:.95rem;margin:0 0 24px}
+  .q{margin:0 0 26px;border:0;padding:0}
+  .q legend{display:flex;gap:10px;align-items:flex-start;font-weight:500;margin-bottom:10px;padding:0}
+  .n{flex:0 0 auto;background:var(--amarelo);color:#222;font-weight:700;border-radius:5px;
+    min-width:26px;text-align:center;padding:0 6px}
+  .opts{display:flex;flex-direction:column;gap:6px;padding-left:36px}
+  .opt{display:flex;align-items:center;gap:10px;padding:8px 10px;border:1px solid var(--borda);
+    border-radius:10px;cursor:pointer;transition:background .15s}
+  .opt:hover{background:var(--azul-claro)}
+  .opt input{width:20px;height:20px;accent-color:var(--azul);margin:0;flex:0 0 auto}
+  button{display:block;width:100%;margin-top:8px;padding:14px;font-size:1.05rem;font-weight:600;
+    color:#fff;background:var(--azul);border:0;border-radius:12px;cursor:pointer}
+  button:hover{filter:brightness(1.1)}
+  button.sec{background:#fff;color:var(--azul);border:2px solid var(--azul)}
+  .opt.certa{background:var(--ok-bg);border-color:var(--ok)}
+  .opt.errada{background:var(--erro-bg);border-color:var(--erro)}
+  .fb{margin:8px 0 0 36px;font-size:.92rem;padding:8px 10px;border-radius:8px;display:none}
+  .fb.ok{display:block;background:var(--ok-bg);color:var(--ok)}
+  .fb.no{display:block;background:var(--erro-bg);color:var(--erro)}
+  #resultado{display:none;text-align:center;margin:0 0 24px;padding:18px;border-radius:14px;background:var(--azul-claro)}
+  #resultado .placar{font-size:2.4rem;font-weight:700;color:var(--azul)}
+  .aviso{color:var(--erro);font-size:.92rem;text-align:center;margin-top:10px;min-height:1.2em}
+</style>
+</head>
+<body>
+<main class="card">
+  <h1>QUIZ POWER BI EXPLORADOR</h1>
+  <p class="nivel">Nível 2 · Explorador</p>
+
+  <div id="resultado" role="status" aria-live="polite">
+    <div class="placar" id="placar"></div>
+    <div id="msg"></div>
+  </div>
+
+  <form id="quiz" novalidate>
+    <fieldset class="q" data-q="1">
+      <legend><span class="n">1</span><span>O Power Query serve para...</span></legend>
+      <div class="opts">
+        <label class="opt"><input type="radio" name="q1" value="a">Transformar/limpar dados antes de carregar</label>
+        <label class="opt"><input type="radio" name="q1" value="b">Criar KPIs e cálculos</label>
+        <label class="opt"><input type="radio" name="q1" value="c">Arrastar os dados até o gráfico</label>
+        <label class="opt"><input type="radio" name="q1" value="d">Visualizar todas as linhas de todas as tabelas</label>
+      </div>
+      <div class="fb"></div>
+    </fieldset>
+
+    <fieldset class="q" data-q="2">
+      <legend><span class="n">2</span><span>A extensão padrão do arquivo do Power BI Desktop é:</span></legend>
+      <div class="opts">
+        <label class="opt"><input type="radio" name="q2" value="a">.pbitx</label>
+        <label class="opt"><input type="radio" name="q2" value="b">.pbix</label>
+        <label class="opt"><input type="radio" name="q2" value="c">.pbi</label>
+        <label class="opt"><input type="radio" name="q2" value="d">.pq</label>
+      </div>
+      <div class="fb"></div>
+    </fieldset>
+
+    <fieldset class="q" data-q="3">
+      <legend><span class="n">3</span><span>Para mostrar tendência temporal, o visual mais indicado é:</span></legend>
+      <div class="opts">
+        <label class="opt"><input type="radio" name="q3" value="a">Barras empilhadas</label>
+        <label class="opt"><input type="radio" name="q3" value="b">Rosca</label>
+        <label class="opt"><input type="radio" name="q3" value="c">Linha</label>
+        <label class="opt"><input type="radio" name="q3" value="d">Dispersão</label>
+      </div>
+      <div class="fb"></div>
+    </fieldset>
+
+    <fieldset class="q" data-q="4">
+      <legend><span class="n">4</span><span>Verdadeiro ou Falso: Temas (JSON) permitem padronizar cores e fontes do relatório.</span></legend>
+      <div class="opts">
+        <label class="opt"><input type="radio" name="q4" value="a">Verdadeiro</label>
+        <label class="opt"><input type="radio" name="q4" value="b">Falso</label>
+      </div>
+      <div class="fb"></div>
+    </fieldset>
+
+    <fieldset class="q" data-q="5">
+      <legend><span class="n">5</span><span>Se “todo gestor é usuário do relatório” e “Ana é gestora”, então:</span></legend>
+      <div class="opts">
+        <label class="opt"><input type="radio" name="q5" value="a">Ana pode não usar relatório</label>
+        <label class="opt"><input type="radio" name="q5" value="b">Ana usa relatório</label>
+        <label class="opt"><input type="radio" name="q5" value="c">Não dá pra concluir</label>
+      </div>
+      <div class="fb"></div>
+    </fieldset>
+
+    <button type="submit" id="enviar">Ver resultado</button>
+    <div class="aviso" id="aviso"></div>
+    <button type="button" class="sec" id="refazer" style="display:none">Responder de novo</button>
+  </form>
+</main>
+
+<script>
+  const gabarito = {
+    q1: { certa: "a", txt: "Transformar/limpar dados antes de carregar (o ETL do Power BI)." },
+    q2: { certa: "b", txt: ".pbix" },
+    q3: { certa: "c", txt: "Linha — mostra a evolução ao longo do tempo." },
+    q4: { certa: "a", txt: "Verdadeiro — um tema JSON define cores, fontes e estilos padrão." },
+    q5: { certa: "b", txt: "Ana usa relatório — se todo gestor usa e Ana é gestora, Ana usa." }
+  };
+
+  const form = document.getElementById("quiz");
+  const aviso = document.getElementById("aviso");
+
+  form.addEventListener("submit", e => {
+    e.preventDefault();
+    const faltando = Object.keys(gabarito).filter(k => !form.querySelector(`input[name=${k}]:checked`));
+    if (faltando.length) {
+      aviso.textContent = "Responda todas as perguntas (falta: " + faltando.map(k => k.slice(1)).join(", ") + ").";
+      return;
+    }
+    aviso.textContent = "";
+    let acertos = 0;
+    for (const k of Object.keys(gabarito)) {
+      const g = gabarito[k];
+      const bloco = form.querySelector(`[data-q="${k.slice(1)}"]`);
+      const fb = bloco.querySelector(".fb");
+      const marcada = form.querySelector(`input[name=${k}]:checked`);
+      const ok = marcada.value === g.certa;
+      bloco.querySelectorAll("input").forEach(i => {
+        i.disabled = true;
+        if (i.value === g.certa) i.parentElement.classList.add("certa");
+        else if (i === marcada) i.parentElement.classList.add("errada");
+      });
+      if (ok) acertos++;
+      fb.className = "fb " + (ok ? "ok" : "no");
+      fb.textContent = (ok ? "✔ Correto! " : "✘ Resposta certa: ") + g.txt;
+    }
+    const total = Object.keys(gabarito).length;
+    document.getElementById("placar").textContent = acertos + " / " + total;
+    document.getElementById("msg").textContent =
+      acertos === total ? "Perfeito! Você gabaritou 🎉" :
+      acertos >= 3 ? "Muito bem! Confira o gabarito abaixo." :
+      "Confira o gabarito abaixo e tente de novo!";
+    document.getElementById("resultado").style.display = "block";
+    document.getElementById("enviar").style.display = "none";
+    document.getElementById("refazer").style.display = "block";
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  });
+
+  document.getElementById("refazer").addEventListener("click", () => location.reload());
+</script>
+</body>
+</html>
